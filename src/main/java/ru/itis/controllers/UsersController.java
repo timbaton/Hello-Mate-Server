@@ -28,7 +28,7 @@ public class UsersController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/users/{user-login}")
+    @GetMapping("/users/{user-login}")
     public User getUserByLogin(@PathVariable(name = "user-login") String login) {
         return repository.getUserByLogin(login);
     }

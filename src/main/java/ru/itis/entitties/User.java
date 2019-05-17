@@ -1,6 +1,7 @@
 package ru.itis.entitties;
 
 import lombok.*;
+import org.hibernate.annotations.CollectionId;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,6 +20,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
+    @Column(unique = true)
     private String login;
     private String password;
     private String sername;
@@ -27,6 +29,6 @@ public class User {
     private String hobbies;
     private int age;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "responsibleUser")
     List<Token> tokens;
 }
