@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.itis.entitties.User;
 
-import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by timurbadretdinov on May, 2019
@@ -12,5 +12,5 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM my_user u WHERE u.login = ?")
-    User getUserByLogin(String login);
+    Optional<User> getUserByLogin(String login);
 }

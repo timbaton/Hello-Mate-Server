@@ -5,8 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.itis.repositories.UserRepository;
 import ru.itis.entitties.User;
+import ru.itis.services.UserService;
+import ru.itis.transfer.UserDto;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by timurbadretdinov on May, 2019
@@ -15,21 +19,24 @@ import java.util.List;
 public class UsersController {
 
     @Autowired
-    UserRepository repository;
+    UserService userService;
 
     @RequestMapping("/users")
-    List<User> all() {
-        return repository.findAll();
+    List<UserDto> all() {
+        return userService.findAll().stream().map(UserDto::from).collect(Collectors.toList());
     }
 
     @PostMapping("/users")
-    public ResponseEntity<Object> addUser(User user) {
-        repository.save(user);
+    public ResponseEntity<Object> addUser(@RequestBody User user) {
+        userService.save(user);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/users/{user-login}")
-    public User getUserByLogin(@PathVariable(name = "user-login") String login) {
-        return repository.getUserByLogin(login);
+    public UserDto getUserByLogin(@PathVariable(name = "user-login") String login) {
+        Optional<User> userByLogin = userService.getUserByLogin(login);
+        if (userByLogin.isPresent()) {
+            return UserDto.from(userByLogin.get());
+        } else throw new IllegalArgumentException("User not found");
     }
 }
